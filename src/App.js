@@ -1,23 +1,21 @@
-import logo from './logo.svg';
 import './App.css';
+import Nav from './component/Nav.jsx'
+import Header from './component/Header.jsx'
+import PostList from './component/PostList.jsx'
+import EditPage from './EditPage.jsx'
+import { HashRouter , Routes, Route } from "react-router-dom";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <HashRouter>
+      <Nav></Nav>
+      <Header></Header>
+      <Routes>
+        <Route exact path="/" element={<PostList />}  />
+        <Route exact path="/editPage" element={<EditPage />}  />
+      </Routes>
+      </HashRouter>
     </div>
   );
 }
