@@ -28,7 +28,7 @@ function Post() {
             if (snapshot.exists()) {
                 Object.keys(snapshot.val()).forEach((key) => {
                     if(postId.key === key){
-                        setDbPost(snapshot.val()[key].post) 
+                        setDbPost(snapshot.val()[key].postContent) 
                     }
                     // console.log(key); // 001, 002, 003
                     // console.log(snapshot.val()[key]); // { name: 'Casper', ... }

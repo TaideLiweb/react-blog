@@ -42,7 +42,7 @@ function PostList() {
                     {Object.keys(DbPost).map((key) => {
                         // console.log(key); // 001, 002, 003
                         // console.log(DbPost[key]); // { name: 'Casper', ... }
-                        return <Link to={`/post/${key}`}><ReviewPost title = {DbPost[key].post} key = {key}></ReviewPost></Link>
+                        return <Link to={`/post/${key}`}><ReviewPost title = {DbPost[key].postTitle} key = {key}></ReviewPost></Link>
                     })}
                     {/* {JSON.stringify(DbPost)} */}
                 </div>

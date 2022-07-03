@@ -16,7 +16,8 @@ const firebaseConfig = {
 };
 
 function EditPage() {
-    const [EditData,setEditData] = useState('')
+    const [PostContent,setPostContent] = useState('')
+    const [PostTitle,setPostTitle] = useState('')
     // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const database = getDatabase(app);
@@ -29,7 +30,8 @@ function EditPage() {
     
     function writeUserData() {
         push(ref(database,), {
-            post:EditData
+            postTitle:PostTitle,
+            postContent:PostContent
         });
     }
 
@@ -37,18 +39,23 @@ function EditPage() {
         <div className="container px-4 px-lg-5">
             <div className="row gx-4 gx-lg-5 justify-content-center">
                 <div className="col-md-10 col-lg-8 col-xl-7">
+                    <input type="text" onChange={(e)=> setPostTitle(e.target.value)} onBlur={(e)=> setPostTitle(e.target.value)} />
                     <CKEditor
                     onChange={ ( { editor } ) => {  
-                        setEditData(editor.getData())
+                        setPostContent(editor.getData())
                     } }
                     onBlur={
                         ( { editor } ) => {
-                            setEditData(editor.getData())
+                            setPostContent(editor.getData())
                         }
                     }
                     />
                     <div>
-                        {EditData}
+                        標題:{PostTitle}
+                    </div>
+                    <div>
+                        
+                        {PostContent}
                     </div>
                     <div>
                         {/* {Test} */}
