@@ -7,14 +7,13 @@ function Post() {
     const [DbPost,setDbPost] = useState('')
     // Initialize Firebase
     const database = getDatabase(firebase);
-    const dbRef = ref(database);
     const postId = useParams()
     function createMarkup() {
         return {__html: DbPost};
     }
 
     useEffect(()=>{
-        get(dbRef).then((snapshot) => {
+        get(ref(database)).then((snapshot) => {
             if (snapshot.exists()) {
                 Object.keys(snapshot.val()).forEach((key) => {
                     if(postId.key === key){
@@ -30,7 +29,7 @@ function Post() {
                 console.error(error);
             });
         
-    },[dbRef,postId.key])
+    },[database,postId.key])
     return (
         <article className="mb-4">
             <div className="container px-4 px-lg-5">

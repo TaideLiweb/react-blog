@@ -1,4 +1,3 @@
-import './App.css';
 import Nav from './component/Nav.jsx'
 import Header from './component/Header.jsx'
 import PostList from './PostList.jsx'

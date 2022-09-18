@@ -30,8 +30,6 @@ code {
   transition: transform .25s;
 }
 
-
-
 .input-fill-x:focus-within::after {
   transform: scaleX(1);
 }
@@ -88,3 +86,11 @@ code {
 .textarea-outline  ~ .input-label {
   background-color: #fff;
 }
+
+.postSettingBtn{
+  cursor: pointer;
+}
+.postSettingBtn:hover{
+  color: #0085A1;
+}
+

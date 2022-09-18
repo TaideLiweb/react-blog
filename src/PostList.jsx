@@ -60,8 +60,8 @@ function PostList() {
                             return (
                             <div>
                                 <div className="text-start">
-                                    <span className="me-3" onClick={()=>removePost(key)}>刪除文章</span>
-                                    <span>編輯文章</span>
+                                    <span className="postSettingBtn me-3" onClick={()=>removePost(key)}>刪除文章</span>
+                                    <span className="postSettingBtn"><Link to={`/editPage?id=${key}`}>編輯文章</Link></span>
                                 </div>
                                 <Link to={`/post/${key}`}>
                                     <ReviewPost title = {DbPost[key].postTitle} key = {key}></ReviewPost>
