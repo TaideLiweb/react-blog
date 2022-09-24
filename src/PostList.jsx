@@ -53,7 +53,7 @@ function PostList() {
         <div className="container px-4 px-lg-5">
             <div className="row gx-4 gx-lg-5 justify-content-center">
                 <div className="col-md-10 col-lg-8 col-xl-7">
-                    {Object.keys(DbPost).map((key) => {
+                    {Object.keys(DbPost).reverse().map((key) => {
                         // console.log(key); // 001, 002, 003
                         // console.log(DbPost[key]); // { name: 'Casper', ... }
                         if(IsAdmin){
