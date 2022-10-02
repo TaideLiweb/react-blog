@@ -1,9 +1,9 @@
 // import React, { useEffect,useState } from 'react';
-import React, {useState,useEffect,useMemo,useRef} from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-editor-classic/src/classiceditor';
 import firebase from './utils/firebase'
-import { getDatabase,ref,get,set,push} from "firebase/database";
+import { getDatabase, ref, get, set, push } from "firebase/database";
 import { useLocation } from "react-router-dom";
 import Swal from 'sweetalert2'
 
@@ -22,7 +22,7 @@ import ImageUpload from '@ckeditor/ckeditor5-image/src/imageupload.js';
 import Indent from '@ckeditor/ckeditor5-indent/src/indent.js';
 import Italic from '@ckeditor/ckeditor5-basic-styles/src/italic.js';
 import Link from '@ckeditor/ckeditor5-link/src/link.js';
-import List from '@ckeditor/ckeditor5-list/src/list.js';    
+import List from '@ckeditor/ckeditor5-list/src/list.js';
 import MediaEmbed from '@ckeditor/ckeditor5-media-embed/src/mediaembed.js';
 import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph.js';
 import PasteFromOffice from '@ckeditor/ckeditor5-paste-from-office/src/pastefromoffice.js';
@@ -31,7 +31,7 @@ import Table from '@ckeditor/ckeditor5-table/src/table.js';
 import TableToolbar from '@ckeditor/ckeditor5-table/src/tabletoolbar.js';
 import TextTransformation from '@ckeditor/ckeditor5-typing/src/texttransformation.js';
 import ImageResize from '@ckeditor/ckeditor5-image/src/imageresize';
-import Alignment from '@ckeditor/ckeditor5-alignment/src/alignment'; 
+import Alignment from '@ckeditor/ckeditor5-alignment/src/alignment';
 import Decoupled from '@ckeditor/ckeditor5-editor-decoupled/src/decouplededitor';
 // import ExportPdf from '@ckeditor/ckeditor5-export-pdf/src/exportpdf';
 import FindAndReplace from '@ckeditor/ckeditor5-find-and-replace/src/findandreplace';
@@ -53,17 +53,17 @@ import HorizontalLine from '@ckeditor/ckeditor5-horizontal-line/src/horizontalli
 import PageBreak from '@ckeditor/ckeditor5-page-break/src/pagebreak';
 import TextPartLanguage from '@ckeditor/ckeditor5-language/src/textpartlanguage';
 function EditPage() {
-    function SpecialCharactersEmoji( editor ) {
-        editor.plugins.get( 'SpecialCharacters' ).addItems( 'Emoji', [
+    function SpecialCharactersEmoji(editor) {
+        editor.plugins.get('SpecialCharacters').addItems('Emoji', [
             { title: 'smiley face', character: '😊' },
             { title: 'rocket', character: '🚀' },
             { title: 'wind blowing face', character: '🌬️' },
             { title: 'floppy disk', character: '💾' },
             { title: 'heart', character: '❤️' }
-        ] );
+        ]);
     }
     const editorConfiguration = {
-        plugins: [ 	
+        plugins: [
             Autoformat,
             BlockQuote,
             Bold,
@@ -104,8 +104,8 @@ function EditPage() {
             Highlight,
             CodeBlock,
             HtmlEmbed,
-            SpecialCharacters, 
-            SpecialCharactersEssentials, 
+            SpecialCharacters,
+            SpecialCharactersEssentials,
             SpecialCharactersEmoji,
             HorizontalLine,
             PageBreak,
@@ -114,7 +114,7 @@ function EditPage() {
         toolbar: {
             items: [
                 'ckbox', 'uploadImage', '|',
-                'exportPDF','exportWord', '|',
+                'exportPDF', 'exportWord', '|',
                 'findAndReplace', 'selectAll', '|',
                 'heading', '|',
                 'bold', 'italic', 'strikethrough', 'underline', 'code', 'subscript', 'superscript', 'removeFormat', '|',
@@ -141,7 +141,7 @@ function EditPage() {
             ]
         },
         image: {
-            resizeUnit:"%",
+            resizeUnit: "%",
             resizeOptions: [
                 {
                     name: 'resizeImage:original',
@@ -180,12 +180,12 @@ function EditPage() {
             tokenUrl: 'https://92457.cke-cs.com/token/dev/7Qva3EjlHxzZ2zNC9dkcQpsj9PL7FufjBYqd?limit=10 '
         }
     };
-    const [PostContent,setPostContent] = useState('')
-    const [Postkey,setPostkey] = useState(0)
-    const [PostTitle,setPostTitle] = useState('')
-    const [CKEditorInitData,setCKEditorInitData] = useState('')
+    const [PostContent, setPostContent] = useState('')
+    const [Postkey, setPostkey] = useState(0)
+    const [PostTitle, setPostTitle] = useState('')
+    const [CKEditorInitData, setCKEditorInitData] = useState('')
     let clearEffect = useRef(true)
-    const [urlQueryString]  = useState(useQuery().get("id")) 
+    const [urlQueryString] = useState(useQuery().get("id"))
     // Initialize Firebase
     const location = useLocation()
     const database = getDatabase(firebase);
@@ -194,57 +194,76 @@ function EditPage() {
         const { search } = useLocation();
         return useMemo(() => new URLSearchParams(search), [search]);
     }
-    useEffect(()=>{
+    useEffect(() => {
         console.log(urlQueryString)
-        if(location.search !== "" && clearEffect.current){
-            get(ref(database,urlQueryString)).then((snapshot) => {
+        if (location.search !== "" && clearEffect.current) {
+            get(ref(database, urlQueryString)).then((snapshot) => {
                 if (snapshot.exists()) {
                     console.log(snapshot.val())
                     setCKEditorInitData(snapshot.val().postContent)
                     setPostTitle(snapshot.val().postTitle)
                     //初始化CKediter編輯器
-                    setPostkey(pre => pre +1)
+                    setPostkey(pre => pre + 1)
                 }
-                }).catch((error) => {
-                    console.error(error);
-                });
-        }else{
-            setPostkey(pre => pre +1)
+            }).catch((error) => {
+                console.error(error);
+            });
+        } else {
+            setPostkey(pre => pre + 1)
             setCKEditorInitData('')
             setPostTitle('')
         }
         clearEffect.current = false
-    },[database,location,urlQueryString])
-    
+    }, [database, location, urlQueryString])
+
     function submitPost() {
 
-        if(PostTitle === ""){
+        if (PostTitle === "") {
             Swal.fire({
                 icon: 'error',
                 title: '請輸入標題唷😊',
-                confirmButtonText:'我知道惹~'
+                confirmButtonText: '我知道惹~'
             })
             return
-        } 
-        const Today=new Date();
-        if(urlQueryString){
-            set(ref(database,urlQueryString),{
-                postTitle:PostTitle,
-                postContent:PostContent
-
-            })
-            setCKEditorInitData('')
-        }else{
-            push(ref(database), {
-                postTitle:PostTitle,
-                postContent:PostContent,
-                date:`${Today.getFullYear()}-${Today.getMonth()+1}-${Today.getDate()}`,
-                timeStamp:Date.now()
-            });
         }
-        //初始化CKediter編輯器
-        setPostTitle('')
-        setPostkey(pre => pre +1)
+        if (PostTitle.length > 0) {
+            Swal.fire({
+                title: '確認送出文章嗎?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: '送出',
+                cancelButtonText: '取消',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const Today = new Date();
+                    if (urlQueryString) {
+                        set(ref(database, urlQueryString), {
+                            postTitle: PostTitle,
+                            postContent: PostContent
+
+                        })
+                        setCKEditorInitData('')
+                    } else {
+                        push(ref(database), {
+                            postTitle: PostTitle,
+                            postContent: PostContent,
+                            date: `${Today.getFullYear()}-${Today.getMonth() + 1}-${Today.getDate()}`,
+                            timeStamp: Date.now()
+                        });
+                    }
+                    //初始化CKediter編輯器
+                    setPostTitle('')
+                    setPostkey(pre => pre + 1)
+                    Swal.fire({
+                        title: '文章已送出!',
+                        icon: 'success',
+                        confirmButtonText: '好~'
+                    })
+                }
+            })
+        }
     }
 
     return (
@@ -254,7 +273,7 @@ function EditPage() {
                     <div className='d-flex align-items-center mb-3'>
                         <span>文章標題：</span>
                         <div className="input-outline-x">
-                            <input className="input-control input-outline" placeholder="標題" type="text" value={PostTitle} onChange={(e)=> setPostTitle(e.target.value)} onBlur={(e)=> setPostTitle(e.target.value)} />
+                            <input className="input-control input-outline" placeholder="標題" type="text" value={PostTitle} onChange={(e) => setPostTitle(e.target.value)} onBlur={(e) => setPostTitle(e.target.value)} />
                             <label className="input-label">標題</label>
                         </div>
                     </div>
@@ -271,31 +290,31 @@ function EditPage() {
                             }
                         }
                         /> */}
-                    <CKEditor
-                        editor={ ClassicEditor }
-                        config={ editorConfiguration }
-                        data={CKEditorInitData}
-                        key={Postkey}
-                        onReady={ editor => {
-                            // You can store the "editor" and use when it is needed.
-                            // console.log( 'Editor is ready to use!', editor );
-                        } }
-                        onChange={ ( event, editor ) => {
-                            setPostContent(editor.getData())
-                        } }
-                        onBlur={ ( event, editor ) => {
-                            setPostContent(editor.getData())
-                        } }
+                        <CKEditor
+                            editor={ClassicEditor}
+                            config={editorConfiguration}
+                            data={CKEditorInitData}
+                            key={Postkey}
+                            onReady={editor => {
+                                // You can store the "editor" and use when it is needed.
+                                // console.log( 'Editor is ready to use!', editor );
+                            }}
+                            onChange={(event, editor) => {
+                                setPostContent(editor.getData())
+                            }}
+                            onBlur={(event, editor) => {
+                                setPostContent(editor.getData())
+                            }}
                         // onFocus={ ( event, editor ) => {
                         // } }
-                    />
+                        />
                     </div>
                     <div className="d-flex justify-content-end mb-4">
-                        <button className="btn btn-primary text-uppercase"  onClick={()=>{
-                        submitPost()
-                    }}>送出</button>
+                        <button className="btn btn-primary text-uppercase" onClick={() => {
+                            submitPost()
+                        }}>送出</button>
                     </div>
-                    
+
                 </div>
             </div>
         </div>
