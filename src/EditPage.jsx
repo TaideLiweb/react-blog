@@ -184,6 +184,7 @@ function EditPage() {
     const [Postkey, setPostkey] = useState(0)
     const [PostTitle, setPostTitle] = useState('')
     const [CKEditorInitData, setCKEditorInitData] = useState('')
+    const [OriginData, setOriginData] = useState('')
     let clearEffect = useRef(true)
     const [urlQueryString] = useState(useQuery().get("id"))
     // Initialize Firebase
@@ -201,6 +202,7 @@ function EditPage() {
                 if (snapshot.exists()) {
                     console.log(snapshot.val())
                     setCKEditorInitData(snapshot.val().postContent)
+                    setOriginData(snapshot.val())
                     setPostTitle(snapshot.val().postTitle)
                     //初始化CKediter編輯器
                     setPostkey(pre => pre + 1)
@@ -241,8 +243,9 @@ function EditPage() {
                     if (urlQueryString) {
                         set(ref(database, urlQueryString), {
                             postTitle: PostTitle,
-                            postContent: PostContent
-
+                            postContent: PostContent,
+                            date: OriginData.date,
+                            timeStamp: OriginData.timeStamp,
                         })
                         setCKEditorInitData('')
                     } else {
