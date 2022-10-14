@@ -176,6 +176,9 @@ function EditPage() {
                 'mergeTableCells'
             ]
         },
+        mediaEmbed: {
+            previewsInData: true
+        },
         ckbox: {
             tokenUrl: 'https://92457.cke-cs.com/token/dev/7Qva3EjlHxzZ2zNC9dkcQpsj9PL7FufjBYqd?limit=10 '
         }
