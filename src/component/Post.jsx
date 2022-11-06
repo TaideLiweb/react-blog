@@ -2,7 +2,7 @@ import React, { useEffect,useState } from 'react';
 import {useParams} from 'react-router-dom';
 import firebase from '../utils/firebase'
 import { getDatabase, ref, get } from "firebase/database";
-
+import '../css/post.scss';
 function Post() {
     const [DbPost,setDbPost] = useState('')
     // Initialize Firebase
@@ -34,7 +34,7 @@ function Post() {
         <article className="mb-4">
             <div className="container px-4 px-lg-5">
                 <div className="row gx-4 gx-lg-5 justify-content-center">
-                    <div className="col-md-10 col-lg-8 col-xl-7" dangerouslySetInnerHTML={createMarkup()}>
+                    <div className="col-md-10 col-lg-8 col-xl-7 postContainer" dangerouslySetInnerHTML={createMarkup()}>
                     </div>
                 </div>
             </div>
