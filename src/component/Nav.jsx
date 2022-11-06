@@ -24,7 +24,7 @@ function Nav() {
                     console.log(user.uid)
                     console.log('我登出了')
                 })
-                navigate('/');
+                navigate(0)
                 Swal.fire({
                     title: '成功登出!',
                     icon: 'success',
