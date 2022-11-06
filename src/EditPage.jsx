@@ -1,9 +1,10 @@
 // import React, { useEffect,useState } from 'react';
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+import React, { useState, useEffect,useCallback, useMemo, useRef } from 'react';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-editor-classic/src/classiceditor';
 import firebase from './utils/firebase'
-import { getDatabase, ref, get, set, push } from "firebase/database";
+import { getDatabase, ref,child, get, set, push } from "firebase/database";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useLocation } from "react-router-dom";
 import Swal from 'sweetalert2'
 
@@ -188,41 +189,75 @@ function EditPage() {
     const [PostTitle, setPostTitle] = useState('')
     const [CKEditorInitData, setCKEditorInitData] = useState('')
     const [OriginData, setOriginData] = useState('')
+    const [IsUser, setIsUser] = useState('')
     let clearEffect = useRef(true)
     const [urlQueryString] = useState(useQuery().get("id"))
     // Initialize Firebase
     const location = useLocation()
     const database = getDatabase(firebase);
+    const auth = getAuth();
 
     function useQuery() {
         const { search } = useLocation();
         return useMemo(() => new URLSearchParams(search), [search]);
     }
-    useEffect(() => {
-        console.log(urlQueryString)
-        if (location.search !== "" && clearEffect.current) {
-            get(ref(database, urlQueryString)).then((snapshot) => {
-                if (snapshot.exists()) {
-                    console.log(snapshot.val())
-                    setCKEditorInitData(snapshot.val().postContent)
-                    setOriginData(snapshot.val())
-                    setPostTitle(snapshot.val().postTitle)
-                    //初始化CKediter編輯器
-                    setPostkey(pre => pre + 1)
-                }
-            }).catch((error) => {
-                console.error(error);
-            });
-        } else {
-            setPostkey(pre => pre + 1)
-            setCKEditorInitData('')
-            setPostTitle('')
-        }
-        clearEffect.current = false
-    }, [database, location, urlQueryString])
+    const resetEditer = useCallback(
+        () => {
+            console.log(IsUser)
+            if (location.search !== "" && clearEffect.current) {
+                get(ref(database,IsUser+"/"+urlQueryString)).then((snapshot) => {
+                    if (snapshot.exists()) {
+                        console.log(snapshot.val())
+                        setCKEditorInitData(snapshot.val().postContent)
+                        setOriginData(snapshot.val())
+                        setPostTitle(snapshot.val().postTitle)
+                        //初始化CKediter編輯器
+                        setPostkey(pre => pre + 1)
+                    }
+                }).catch((error) => {
+                    console.error(error);
+                });
+            } else {
+                setPostkey(pre => pre + 1)
+                setCKEditorInitData('')
+                setPostTitle('')
+            }
+        },[database, location, urlQueryString,IsUser]
+    )
 
+    // useEffect(() => {
+    //     if (location.search !== "" && clearEffect.current) {
+    //         get(ref(database, urlQueryString)).then((snapshot) => {
+    //             if (snapshot.exists()) {
+    //                 console.log(snapshot.val())
+    //                 setCKEditorInitData(snapshot.val().postContent)
+    //                 setOriginData(snapshot.val())
+    //                 setPostTitle(snapshot.val().postTitle)
+    //                 //初始化CKediter編輯器
+    //                 setPostkey(pre => pre + 1)
+    //             }
+    //         }).catch((error) => {
+    //             console.error(error);
+    //         });
+    //     } else {
+    //         setPostkey(pre => pre + 1)
+    //         setCKEditorInitData('')
+    //         setPostTitle('')
+    //     }
+    //     clearEffect.current = false
+    // }, [database, location, urlQueryString])
+    useEffect(()=>{
+        onAuthStateChanged(auth, (user) => {
+            if(user && user.uid === process.env.REACT_APP_zongZhanUid){
+                setIsUser('zongZhan')
+            }
+            if(user && user.uid === process.env.REACT_APP_tedUid){
+                setIsUser('ted')
+            }
+            resetEditer()
+        })
+    },[auth,resetEditer])
     function submitPost() {
-
         if (PostTitle === "") {
             Swal.fire({
                 icon: 'error',
@@ -244,7 +279,7 @@ function EditPage() {
                 if (result.isConfirmed) {
                     const Today = new Date();
                     if (urlQueryString) {
-                        set(ref(database, urlQueryString), {
+                        set(ref(database,IsUser+"/"+urlQueryString), {
                             postTitle: PostTitle,
                             postContent: PostContent,
                             date: OriginData.date,
@@ -252,7 +287,7 @@ function EditPage() {
                         })
                         setCKEditorInitData('')
                     } else {
-                        push(ref(database), {
+                        push(child(ref(database),IsUser), {
                             postTitle: PostTitle,
                             postContent: PostContent,
                             date: `${Today.getFullYear()}-${Today.getMonth() + 1}-${Today.getDate()}`,

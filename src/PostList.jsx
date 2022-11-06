@@ -3,16 +3,16 @@ import ReviewPost from './component/ReviewPost.jsx'
 import firebase from './utils/firebase'
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import Swal from 'sweetalert2'
-import { getDatabase, ref, get, remove } from "firebase/database";
+import { getDatabase, ref,child, get, remove } from "firebase/database";
 import { Link } from 'react-router-dom';
 
 function PostList() {
     const [DbPostList, setDbPostList] = useState([])
     const [PostList, setPostList] = useState([])
     const [IsAdmin, setIsAdmin] = useState('')
+    const [IsUser, setIsUser] = useState('')
     // Initialize Firebase
     const database = getDatabase(firebase);
-    const dbRef = ref(database);
     const auth = getAuth();
 
     function removePost(postKey) {
@@ -27,7 +27,7 @@ function PostList() {
             cancelButtonText: '取消',
         }).then((result) => {
             if (result.isConfirmed) {
-                remove(ref(database, postKey))
+                remove(ref(database, IsUser+"/"+postKey))
                 getPost()
                 Swal.fire({
                     title: '已完成刪除!',
@@ -37,11 +37,12 @@ function PostList() {
             }
         })
         // remove(ref(database, postKey))
-        // getPost()
+        getPost()
     }
     const getPost = useCallback(
         () => {
-            get(dbRef).then((snapshot) => {
+            if(IsUser === "") return
+            get(child(ref(database),IsUser)).then((snapshot) => {
                 if (snapshot.exists()) {
                     let replaceAry = []
                     Object.keys(snapshot.val()).forEach((key) => {
@@ -61,20 +62,31 @@ function PostList() {
                 console.error(error);
             });
         },
-        [dbRef],
+        [database,IsUser],
     );
     useEffect(() => {
-        getPost()
         onAuthStateChanged(auth, (user) => {
-            if (user && user.uid === 'B4rLpzaQq7Xhbc3leipESVUsDrB3') {
+            if(user === null) {
+                setIsUser('zongZhan')
+                getPost()
+                return
+            }
+            if (user.uid === process.env.REACT_APP_zongZhanUid || user.uid === process.env.REACT_APP_tedUid) {
                 // User is signed in, see docs for a list of available properties
                 // https://firebase.google.com/docs/reference/js/firebase.User
                 console.log(user.uid)
                 setIsAdmin(true)
+                if(user.uid === process.env.REACT_APP_zongZhanUid){
+                    setIsUser('zongZhan')
+                }
+                if(user.uid === process.env.REACT_APP_tedUid){
+                    setIsUser('ted')
+                }
                 // ...
             }else{
                 setIsAdmin(false)
             }
+            getPost()
         });
     }, [auth, getPost])
 

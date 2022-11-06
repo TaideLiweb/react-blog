@@ -37,7 +37,8 @@ function Nav() {
     useEffect(() => {
 
         onAuthStateChanged(auth, (user) => {
-            if (user && user.uid === 'B4rLpzaQq7Xhbc3leipESVUsDrB3') {
+            if(user === null) return
+            if (user.uid === process.env.REACT_APP_zongZhanUid || user.uid === process.env.REACT_APP_tedUid) {
                 // User is signed in, see docs for a list of available properties
                 // https://firebase.google.com/docs/reference/js/firebase.User
                 console.log(user.uid)
@@ -57,7 +58,7 @@ function Nav() {
     return (
             <nav className="navbar navbar-expand-lg navbar-light" id="mainNav">
                 <div className="container px-4 px-lg-5">
-                    <Link to="/" className="navbar-brand">瓊儀爸爸的部落格</Link>
+                    <Link to="/" className="navbar-brand">展哥的部落格</Link>
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                         選單
                         <i className="fas fa-bars"></i>
