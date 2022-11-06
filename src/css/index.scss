@@ -94,3 +94,16 @@ code {
   color: #0085A1;
 }
 
+#mainNav .navbar-nav > li.nav-item > button.nav-link {
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.0625em;
+  text-transform: uppercase;
+  background-color: transparent;
+  border: 0;
+}
+@media (min-width: 992px) {
+  #mainNav .navbar-nav > li.nav-item > button.nav-link {
+    color: #fff;
+  }
+}

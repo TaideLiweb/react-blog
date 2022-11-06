@@ -66,14 +66,14 @@ function PostList() {
     useEffect(() => {
         getPost()
         onAuthStateChanged(auth, (user) => {
-            if (user) {
+            if (user && user.uid === 'B4rLpzaQq7Xhbc3leipESVUsDrB3') {
                 // User is signed in, see docs for a list of available properties
                 // https://firebase.google.com/docs/reference/js/firebase.User
-                if (user.uid === 'B4rLpzaQq7Xhbc3leipESVUsDrB3') {
-                    console.log(user.uid)
-                    setIsAdmin(true)
-                }
+                console.log(user.uid)
+                setIsAdmin(true)
                 // ...
+            }else{
+                setIsAdmin(false)
             }
         });
     }, [auth, getPost])

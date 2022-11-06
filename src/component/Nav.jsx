@@ -1,7 +1,60 @@
+import React, { useEffect, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-function Nav() {
-    return (
+import { getAuth, onAuthStateChanged ,signOut} from "firebase/auth";
+import Swal from 'sweetalert2'
+import { useNavigate } from 'react-router-dom';
 
+function Nav() {
+    const [IsAdmin, setIsAdmin] = useState('')
+    const [LoggedIn, setLoggedIn] = useState('')
+    const auth = getAuth();
+    const navigate = useNavigate();
+    function handleSignOut(){
+        Swal.fire({
+            title: '確定要登出嗎?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: '是的',
+            cancelButtonText: '取消',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                signOut(auth,(user) => {
+                    console.log(user.uid)
+                    console.log('我登出了')
+                })
+                navigate('/');
+                Swal.fire({
+                    title: '成功登出!',
+                    icon: 'success',
+                    confirmButtonText: '好~'
+                })
+            }
+        })
+
+    }
+    useEffect(() => {
+
+        onAuthStateChanged(auth, (user) => {
+            if (user && user.uid === 'B4rLpzaQq7Xhbc3leipESVUsDrB3') {
+                // User is signed in, see docs for a list of available properties
+                // https://firebase.google.com/docs/reference/js/firebase.User
+                console.log(user.uid)
+                setLoggedIn(true)
+                setIsAdmin(true)
+                // ...
+            }else if(user){
+                setLoggedIn(true)
+                setIsAdmin(false)
+            }else{
+                setIsAdmin(false)
+                setLoggedIn(false)
+            }
+        });
+        
+    }, [auth])
+    return (
             <nav className="navbar navbar-expand-lg navbar-light" id="mainNav">
                 <div className="container px-4 px-lg-5">
                     <Link to="/" className="navbar-brand">瓊儀爸爸的部落格</Link>
@@ -12,7 +65,14 @@ function Nav() {
                     <div className="collapse navbar-collapse" id="navbarResponsive">
                         <ul className="navbar-nav ms-auto py-4 py-lg-0">
                             <li className="nav-item"><Link to="/" className="nav-link px-lg-3 py-3 py-lg-4">首頁</Link></li>
-                            <li className="nav-item"><Link to="/editPage" className="nav-link px-lg-3 py-3 py-lg-4">撰寫文章</Link></li>
+                            {IsAdmin && <li className="nav-item"><Link to="/editPage" className="nav-link px-lg-3 py-3 py-lg-4">撰寫文章</Link></li>}
+                            {LoggedIn ? 
+                                (
+                                <li className="nav-item"><button href='#' onClick={()=>handleSignOut()} className="nav-link px-lg-3 py-3 py-lg-4">登出</button></li>
+                                ) : (
+                                <li className="nav-item"><Link to="/loginPage" className="nav-link px-lg-3 py-3 py-lg-4">登入</Link></li>
+                                )
+                            }
                         </ul>
                     </div>
                 </div>
