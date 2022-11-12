@@ -94,6 +94,8 @@ code {
   color: #0085A1;
 }
 
+//修改登出鍵樣式
+
 #mainNav .navbar-nav > li.nav-item > button.nav-link {
   font-size: 0.75rem;
   font-weight: 800;
@@ -105,5 +107,16 @@ code {
 @media (min-width: 992px) {
   #mainNav .navbar-nav > li.nav-item > button.nav-link {
     color: #fff;
+  }
+}
+header.masthead{
+  margin-top: 57px;
+}
+@media (min-width: 992px) {
+  header.masthead{
+    margin-top: 0px;
+    padding-top: 13.5rem;
+    padding-bottom: 13.5rem;
+    background-position-y: 20%;
   }
 }
