@@ -20,6 +20,8 @@ import ImageCaption from '@ckeditor/ckeditor5-image/src/imagecaption.js';
 import ImageStyle from '@ckeditor/ckeditor5-image/src/imagestyle.js';
 import ImageToolbar from '@ckeditor/ckeditor5-image/src/imagetoolbar.js';
 import ImageUpload from '@ckeditor/ckeditor5-image/src/imageupload.js';
+import AutoImage from '@ckeditor/ckeditor5-image/src/autoimage';
+import ImageInsert from '@ckeditor/ckeditor5-image/src/imageinsert';
 import Indent from '@ckeditor/ckeditor5-indent/src/indent.js';
 import Italic from '@ckeditor/ckeditor5-basic-styles/src/italic.js';
 import Link from '@ckeditor/ckeditor5-link/src/link.js';
@@ -78,6 +80,8 @@ function EditPage() {
             ImageToolbar,
             ImageUpload,
             ImageResize,
+            ImageInsert,
+            AutoImage,
             Alignment,
             Decoupled,
             Indent,
@@ -114,8 +118,8 @@ function EditPage() {
         ],
         toolbar: {
             items: [
-                'ckbox', 'uploadImage', '|',
-                'exportPDF', 'exportWord', '|',
+                'ckbox', 'uploadImage','insertImage', '|',
+                // 'exportPDF', 'exportWord', '|',
                 'findAndReplace', 'selectAll', '|',
                 'heading', '|',
                 'bold', 'italic', 'strikethrough', 'underline', 'code', 'subscript', 'superscript', 'removeFormat', '|',
@@ -160,12 +164,22 @@ function EditPage() {
                     label: '75%'
                 }
             ],
+			styles: {
+				options: [
+                    'inline', 'alignLeft','alignCenter','alignRight',
+                    'block','alignBlockRight', 'alignBlockLeft', 
+                    'side'
+                ]
+			},
             toolbar: [
                 'imageTextAlternative',
                 'imageStyle:inline',
+                'imageStyle:alignLeft',
+                'imageStyle:alignCenter',
+                'imageStyle:alignRight',
+                'imageStyle:alignBlockLeft',
                 'imageStyle:block',
-                'imageStyle:align-block-left',
-                'imageStyle:align-block-right',
+                'imageStyle:alignBlockRight',
                 'imageStyle:side',
                 'resizeImage'
             ],
@@ -203,6 +217,7 @@ function EditPage() {
     }
     const resetEditer = useCallback(
         () => {
+            if(IsUser==="") return
             console.log(IsUser)
             if (location.search !== "" && clearEffect.current) {
                 get(ref(database,IsUser+"/"+urlQueryString)).then((snapshot) => {

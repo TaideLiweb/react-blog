@@ -2,13 +2,14 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { getAuth, onAuthStateChanged ,signOut} from "firebase/auth";
 import Swal from 'sweetalert2'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,useLocation } from 'react-router-dom';
 
 function Nav() {
     const [IsAdmin, setIsAdmin] = useState('')
     const [LoggedIn, setLoggedIn] = useState('')
     const auth = getAuth();
     const navigate = useNavigate();
+    const location = useLocation()
     function handleSignOut(){
         Swal.fire({
             title: '確定要登出嗎?',
@@ -24,18 +25,21 @@ function Nav() {
                     console.log(user.uid)
                     console.log('我登出了')
                 })
-                navigate(0)
                 Swal.fire({
                     title: '成功登出!',
                     icon: 'success',
                     confirmButtonText: '好~'
                 })
+                if(location.pathname==="/"){
+                    navigate(0)
+                    return
+                }
+                navigate("/")
+                navigate(0)
             }
         })
-
     }
     useEffect(() => {
-
         onAuthStateChanged(auth, (user) => {
             if(user === null) return
             if (user.uid === process.env.REACT_APP_zongZhanUid || user.uid === process.env.REACT_APP_tedUid) {

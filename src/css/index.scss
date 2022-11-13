@@ -97,7 +97,7 @@ code {
 //修改登出鍵樣式
 
 #mainNav .navbar-nav > li.nav-item > button.nav-link {
-  font-size: 0.75rem;
+  font-size: 0.9rem;
   font-weight: 800;
   letter-spacing: 0.0625em;
   text-transform: uppercase;
@@ -119,4 +119,8 @@ header.masthead{
     padding-bottom: 13.5rem;
     background-position-y: 20%;
   }
+}
+
+#mainNav .navbar-nav > li.nav-item > a.nav-link{
+  font-size: 0.9rem;
 }
