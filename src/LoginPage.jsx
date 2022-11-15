@@ -1,8 +1,6 @@
-// import React, { useEffect,useState } from 'react';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './css/loginPage.scss';
-// import firebase from './utils/firebase'
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 function LoginPage() {
     const auth = getAuth();
@@ -13,7 +11,7 @@ function LoginPage() {
         signInWithEmailAndPassword(auth, Email, Password)
         .then((userCredential) => {
             // Signed in
-            const user = userCredential.user;
+            // const user = userCredential.user;
             console.log('登入了')
             navigate('/');
             // ...

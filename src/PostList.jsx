@@ -5,12 +5,13 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import Swal from 'sweetalert2'
 import { getDatabase, ref,child, get, remove } from "firebase/database";
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux'
 
 function PostList() {
     const [DbPostList, setDbPostList] = useState([])
     const [PostList, setPostList] = useState([])
-    const [IsAdmin, setIsAdmin] = useState('')
     const [IsUser, setIsUser] = useState('')
+    const admin = useSelector((state) => state.nav.admin)
     // Initialize Firebase
     const database = getDatabase(firebase);
     const auth = getAuth();
@@ -75,7 +76,6 @@ function PostList() {
                 // User is signed in, see docs for a list of available properties
                 // https://firebase.google.com/docs/reference/js/firebase.User
                 console.log(user.uid)
-                setIsAdmin(true)
                 if(user.uid === process.env.REACT_APP_zongZhanUid){
                     setIsUser('zongZhan')
                 }
@@ -83,8 +83,6 @@ function PostList() {
                     setIsUser('ted')
                 }
                 // ...
-            }else{
-                setIsAdmin(false)
             }
             getPost()
         });
@@ -114,13 +112,6 @@ function PostList() {
                                 <label className="input-label">搜尋文章標題</label>
                             </div>
                         </div>
-                        {/* <div className="col-5">
-                            <select className='form-select' name="" id="">
-                                <option value="13">13</option>
-                                <option value="13">13</option>
-                                <option value="13">13</option>
-                            </select>
-                        </div> */}
                     </div>
                 </div>
             </div>
@@ -129,7 +120,7 @@ function PostList() {
                     {PostList.map((PostListItem) => {
                         // console.log(key); // 001, 002, 003
                         // console.log(DbPostList[key]); // { name: 'Casper', ... }
-                        if (IsAdmin) {
+                        if (admin) {
                             return (
                                 <div>
                                     <div className="text-start">
@@ -146,7 +137,6 @@ function PostList() {
                             </Link>
                         }
                     })}
-                    {/* {JSON.stringify(DbPostList)} */}
                 </div>
             </div>
         </div>

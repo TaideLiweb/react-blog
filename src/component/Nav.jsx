@@ -1,15 +1,17 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import { getAuth, onAuthStateChanged ,signOut} from "firebase/auth";
 import Swal from 'sweetalert2'
-import { useNavigate,useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux'
+import { setAdmin, setLoggedIn } from './navSlice'
 
 function Nav() {
-    const [IsAdmin, setIsAdmin] = useState('')
-    const [LoggedIn, setLoggedIn] = useState('')
     const auth = getAuth();
     const navigate = useNavigate();
-    const location = useLocation()
+    const admin = useSelector((state) => state.nav.admin)
+    const loggedIn = useSelector((state) => state.nav.loggedIn)
+    const dispatch = useDispatch()
     function handleSignOut(){
         Swal.fire({
             title: '確定要登出嗎?',
@@ -30,12 +32,9 @@ function Nav() {
                     icon: 'success',
                     confirmButtonText: '好~'
                 })
-                if(location.pathname==="/"){
-                    navigate(0)
-                    return
-                }
+                dispatch(setAdmin(false))
+                dispatch(setLoggedIn(false))
                 navigate("/")
-                navigate(0)
             }
         })
     }
@@ -46,19 +45,19 @@ function Nav() {
                 // User is signed in, see docs for a list of available properties
                 // https://firebase.google.com/docs/reference/js/firebase.User
                 console.log(user.uid)
-                setLoggedIn(true)
-                setIsAdmin(true)
+                dispatch(setAdmin(true))
+                dispatch(setLoggedIn(true))
                 // ...
             }else if(user){
-                setLoggedIn(true)
-                setIsAdmin(false)
+                dispatch(setAdmin(true))
+                dispatch(setLoggedIn(false))
             }else{
-                setIsAdmin(false)
-                setLoggedIn(false)
+                dispatch(setAdmin(false))
+                dispatch(setLoggedIn(false))
             }
         });
         
-    }, [auth])
+    }, [auth,dispatch])
     return (
             <nav className="navbar navbar-expand-lg navbar-light" id="mainNav">
                 <div className="container px-4 px-lg-5">
@@ -70,8 +69,8 @@ function Nav() {
                     <div className="collapse navbar-collapse" id="navbarResponsive">
                         <ul className="navbar-nav ms-auto py-4 py-lg-0">
                             <li className="nav-item"><Link to="/" className="nav-link px-lg-3 py-3 py-lg-4">首頁</Link></li>
-                            {IsAdmin && <li className="nav-item"><Link to="/editPage" className="nav-link px-lg-3 py-3 py-lg-4">撰寫文章</Link></li>}
-                            {LoggedIn ? 
+                            {admin && <li className="nav-item"><Link to="/editPage" className="nav-link px-lg-3 py-3 py-lg-4">撰寫文章</Link></li>}
+                            {loggedIn ? 
                                 (
                                 <li className="nav-item"><button href='#' onClick={()=>handleSignOut()} className="nav-link px-lg-3 py-3 py-lg-4">登出</button></li>
                                 ) : (
