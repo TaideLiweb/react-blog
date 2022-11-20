@@ -7,7 +7,10 @@ function LoginPage() {
     const navigate = useNavigate();
     const [Email,SetEmail] = useState('')
     const [Password,SetPassword] = useState('')
-    function login(){
+    function login(e){
+        //防止 form 表單預設送出,導致第一次登入失效
+        e.preventDefault()
+
         signInWithEmailAndPassword(auth, Email, Password)
         .then((userCredential) => {
             // Signed in
@@ -18,7 +21,7 @@ function LoginPage() {
         })
     }
     return (
-        <div className="login" onSubmit={login}>
+        <div className="login" onSubmit={(e)=>{login(e)}}>
             <div className="login_content">
                 <form className="form-signin">
                     <h1 className="h3 mb-3 font-weight-normal">請先登入</h1>

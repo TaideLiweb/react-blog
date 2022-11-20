@@ -5,7 +5,7 @@ import ClassicEditor from '@ckeditor/ckeditor5-editor-classic/src/classiceditor'
 import firebase from './utils/firebase'
 import { getDatabase, ref,child, get, set, push } from "firebase/database";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { useLocation } from "react-router-dom";
+import { useLocation,useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2'
 
 import Autoformat from '@ckeditor/ckeditor5-autoformat/src/autoformat.js';
@@ -208,6 +208,7 @@ function EditPage() {
     const [urlQueryString] = useState(useQuery().get("id"))
     // Initialize Firebase
     const location = useLocation()
+    const navigate = useNavigate();
     const database = getDatabase(firebase);
     const auth = getAuth();
 
@@ -312,6 +313,7 @@ function EditPage() {
                     //初始化CKediter編輯器
                     setPostTitle('')
                     setPostkey(pre => pre + 1)
+                    navigate("/")
                     Swal.fire({
                         title: '文章已送出!',
                         icon: 'success',
