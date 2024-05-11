@@ -1,5 +1,3 @@
-
-
 function Post({ title, postDate }) {
     return (
         <>

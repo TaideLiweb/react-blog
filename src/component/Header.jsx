@@ -1,8 +1,8 @@
 // import Background from 'public/home-bg.jpg';
-import background from "../753053.jpg";
+// import background from "../753053.jpg";
 function Header() {
     return (
-        <header className="masthead" style={{backgroundImage: `url(${background})`}}>
+        <header className="masthead" style={{backgroundImage: `url(https://picsum.photos/id/1/1600/900)`}}>
             <div className="container position-relative px-4 px-lg-5">
                 <div className="row gx-4 gx-lg-5 justify-content-center">
                     <div className="col-md-10 col-lg-8 col-xl-7">

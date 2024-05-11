@@ -61,7 +61,7 @@ function Nav() {
     return (
             <nav className="navbar navbar-expand-lg navbar-light" id="mainNav">
                 <div className="container px-4 px-lg-5">
-                    <Link to="/" className="navbar-brand">展哥的部落格</Link>
+                    <Link to="/" className="navbar-brand">Ted's blog</Link>
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                         選單
                         <i className="fas fa-bars"></i>
