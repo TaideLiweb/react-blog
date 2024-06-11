@@ -68,7 +68,7 @@ function PostList() {
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {
             if(user === null) {
-                setIsUser('zongZhan')
+                setIsUser('ted')
                 getPost()
                 return
             }
