@@ -195,7 +195,7 @@ function EditPage() {
             previewsInData: true
         },
         ckbox: {
-            tokenUrl: 'https://92457.cke-cs.com/token/dev/63982cc9c0b9f6fa5e2cfd5e24dc48c2f7fa8de3e74476c059c308ca11dc?limit=10'
+            tokenUrl: 'https://92457.cke-cs.com/token/dev/53132cdff18d9f0a16d050f90dbf74cdb48f95630cac983f909e7ee0c1bc?limit=10'
         }
     };
     const [PostContent, setPostContent] = useState('')
